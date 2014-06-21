@@ -1,9 +1,9 @@
 .card {
   float: left;
-  border: solid 1px black;
-  width: 100px;
+  border: solid 2px black;
+  width: 120px;
   border-radius: 5px;
-  height: 140px;
+  height: 167px;
   margin-right: 20px;
 }
 
@@ -13,4 +13,10 @@
 
 .hand {
   overflow: auto;
+}
+
+body {
+  background-image: url("../img/background.jpg");
+  background-size: 100% 100%;
+  color: white;
 }
