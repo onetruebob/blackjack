@@ -9,6 +9,7 @@ class window.Hand extends Backbone.Collection
     @add(@deck.pop()).last()
     if @bestScore() > 21 then @trigger 'bust', @
     @checkBlackjack()
+    @last()
 
   scores: ->
     # The scores are an array of potential scores.
