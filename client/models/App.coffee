@@ -24,11 +24,14 @@ class window.App extends Backbone.Model
       alert "Dealer kicked yo ass! Backjack!"
 
     dealerHand.on 'stand', (hand) =>
-      alert "Dealer is standing. Who wins?"
+      @checkWinner()
+
+    playerHand.checkBlackjack()
 
   playDealer: ->
     dealerHand = @get 'dealerHand'
     dealerHand.revealCards()
+    dealerHand.checkBlackjack()
     while @dealerScore() < 17
       dealerHand.hit()
 
@@ -37,11 +40,12 @@ class window.App extends Backbone.Model
 
   dealerScore: ->
     dealerHand = @get 'dealerHand'
-    scores = dealerHand.scores()
-    if ( scores[1] and scores[1] < 21)
-      return scores[1]
-    else
-      return scores[0]
+    dealerHand.bestScore()
+
+  checkWinner: ->
+    playerScore = (@get 'playerHand').bestScore()
+    dealerScore = (@get 'dealerHand').bestScore()
+    if (playerScore > dealerScore) then alert "You win with #{playerScore}" else alert "You lost! The dealer has #{dealerScore}"
 
 
     ## this.get('playerHand').on('win', function(){
