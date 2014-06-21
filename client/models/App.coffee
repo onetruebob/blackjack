@@ -8,22 +8,28 @@ class window.App extends Backbone.Model
     playerHand = @get 'playerHand'
     dealerHand = @get 'dealerHand'
 
-    playerHand.on 'bust', (hand) ->
-      alert "you lose, sucker! your score is #{hand.scores()[0]}"
+    playerHand.on 'bust', (hand) =>
+      @set 'winner', 'dealer'
+      @set 'playerStance', 'bust'
 
-    playerHand.on 'blackjack', (hand) ->
-      alert "Winner winner chicken dinner!"
+    playerHand.on 'blackjack', (hand) =>
+      @set 'winner', 'player'
+      @set 'playerStance', 'blackjack'
 
     playerHand.on 'stand', (hand) =>
+      @set 'placerStance', 'stand'
       @playDealer()
 
-    dealerHand.on 'bust', (hand) ->
-      alert "Dealer busted. You win!"
+    dealerHand.on 'bust', (hand) =>
+      @set 'winner', 'player'
+      @set 'dealerStance', 'bust'
 
-    dealerHand.on 'blackjack', (hand) ->
-      alert "Dealer kicked yo ass! Backjack!"
+    dealerHand.on 'blackjack', (hand) =>
+      @set 'winner', 'dealer'
+      @set 'dealerStance', 'blackjack'
 
     dealerHand.on 'stand', (hand) =>
+      @set 'dealerStance', 'stand'
       @checkWinner()
 
     playerHand.checkBlackjack()
@@ -45,7 +51,7 @@ class window.App extends Backbone.Model
   checkWinner: ->
     playerScore = (@get 'playerHand').bestScore()
     dealerScore = (@get 'dealerHand').bestScore()
-    if (playerScore > dealerScore) then alert "You win with #{playerScore}" else alert "You lost! The dealer has #{dealerScore}"
+    if (playerScore > dealerScore) then @set 'winner', 'player' else @set 'winner', 'dealer'
 
 
     ## this.get('playerHand').on('win', function(){
