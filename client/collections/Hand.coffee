@@ -3,9 +3,12 @@ class window.Hand extends Backbone.Collection
   model: Card
 
   initialize: (array, @deck, @isDealer) ->
+    do @checkBlackjack
 
   hit: ->
     @add(@deck.pop()).last()
+    if @scores()[0] > 21 then @trigger 'bust', @
+    do @checkBlackjack
 
   scores: ->
     # The scores are an array of potential scores.
@@ -18,3 +21,22 @@ class window.Hand extends Backbone.Collection
       score + if card.get 'revealed' then card.get 'value' else 0
     , 0
     if hasAce then [score, score + 10] else [score]
+
+  stand: ->
+    @trigger 'stand', @
+
+  checkBlackjack: ->
+    if (@scores()[0] is 21 or @scores()[1] is 21) then @trigger 'blackjack', @
+
+  revealCards: ->
+    _.each @models, (card) ->
+      if not card.get 'revealed' then card.flip()
+
+  bestScore: ->
+    scores = @scores()
+    if ( scores[1] and scores[1] < 21)
+      return scores[1]
+    else
+      return scores[0]
+
+
